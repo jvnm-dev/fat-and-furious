@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import {
+  LiaDumbbellSolid,
+  LiaChartBarSolid,
+  LiaCogSolid,
+} from "react-icons/lia";
 
+import "@/lib/prisma";
 import { cn } from "@/lib/utils";
 import { auth } from "@/auth";
 import { bebas, roboto } from "@/lib/fonts/fonts";
@@ -24,7 +30,6 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "default",
     title: APP_DEFAULT_TITLE,
-    // startUpImage: [],
   },
   formatDetection: {
     telephone: false,
@@ -64,25 +69,28 @@ export default async function RootLayout({
           bebas.variable,
         )}
       >
-        <div className="h-[calc(100vh+200px)]">{children}</div>
+        <div>{children}</div>
 
         {!!authInfo?.user && (
-          <nav className="fixed bottom-0 w-screen">
+          <nav className="w-screen">
             <div className="flex justify-between items-center border-primary border-t-2">
               <Link
                 href="/dashboard"
-                className="flex-1 p-4 text-black bg-primary"
+                className="flex-1 p-4 text-black bg-primary flex justify-center"
               >
-                Dashboard
+                <LiaDumbbellSolid className="text-2xl" />
               </Link>
-              <Link href="/profile" className="flex-1 p-4 text-white bg-black">
-                History
+              <Link
+                href="/profile"
+                className="flex-1 p-4 text-white bg-black flex justify-center"
+              >
+                <LiaChartBarSolid className="text-2xl" />
               </Link>
               <Link
                 href="/settings"
-                className="flex-1 p-4 text-white bg-black rounded-tr-md"
+                className="flex-1 p-4 text-white bg-black rounded-tr-md flex justify-center"
               >
-                Settings
+                <LiaCogSolid className="text-2xl" />
               </Link>
             </div>
           </nav>

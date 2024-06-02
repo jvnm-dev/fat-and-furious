@@ -1,5 +1,6 @@
 import NextAuth, { type NextAuthConfig } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import prisma from "@/lib/prisma";
 
 export const authConfig = {
   pages: {
@@ -23,9 +24,14 @@ export const authConfig = {
 
       return isSignedIn;
     },
-    signIn({ profile, account }) {
-      if (account?.provider === "google") {
-        return profile?.email === "jasonvanmalder@gmail.com";
+    async signIn({ profile, account }) {
+      if (account?.provider === "google" && !!profile?.email) {
+        const user = await prisma.users.findFirst({
+          where: {
+            email: profile.email,
+          },
+        });
+        return !!user;
       }
       return false;
     },
@@ -43,6 +49,13 @@ export const {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID ?? "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
     }),
   ],
 });

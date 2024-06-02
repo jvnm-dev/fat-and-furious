@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import Image from "next/image";
 import { TrainingCard } from "@/components/ui/training-card";
-import { TrainingType } from "@/lib/types/training";
+import { trainings } from "@/lib/constants/trainings";
 
 export default async function Dashboard() {
   const currentMonthAndYearLiteral = new Date().toLocaleString("en-US", {
@@ -14,75 +14,36 @@ export default async function Dashboard() {
   const userImage = authInfo?.user?.image ?? "";
 
   return (
-    <div className="flex flex-col  h-screen w-screen p-4">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl text-yellow-400">Your plan</h1>
-          <h2 className="text-2xl text-yellow-100">
-            {currentMonthAndYearLiteral}
-          </h2>
+    <div className="flex flex-col w-screen">
+      <div className="p-4 bg-[#0E0C0B]">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl text-yellow-400">Your plan</h1>
+            <h2 className="text-2xl text-yellow-100">
+              {currentMonthAndYearLiteral}
+            </h2>
+          </div>
+          <div>
+            <Image
+              src={userImage}
+              className="rounded-full ring-2 ring-[#F3CE49]"
+              alt="User image"
+              width={64}
+              height={64}
+            />
+          </div>
         </div>
-        <div>
-          <Image
-            src={userImage}
-            className="rounded-full ring-2 ring-[#F3CE49]"
-            alt="User image"
-            width={64}
-            height={64}
-          />
-        </div>
+
+        <p className="text-yellow-100 mt-2">
+          Choose a training plan to start your workout.
+        </p>
       </div>
 
-      <p className="mt-4 text-yellow-100">
-        Choose a training session to start your day
-      </p>
-
-      <TrainingCard
-        training={{
-          name: "Chest & Triceps",
-          duration: 60,
-          type: TrainingType.Strength,
-          recommended: true,
-        }}
-      />
-
-      <TrainingCard
-        training={{
-          name: "Biceps & Shoulders",
-          duration: 60,
-          type: TrainingType.Strength,
-        }}
-      />
-
-      <TrainingCard
-        training={{
-          name: "Back & Abs",
-          duration: 60,
-          type: TrainingType.Strength,
-        }}
-      />
-
-      <TrainingCard
-        training={{
-          name: "Trekking",
-          duration: 120,
-          type: TrainingType.Cardio,
-        }}
-      />
-      <TrainingCard
-        training={{
-          name: "Trekking",
-          duration: 120,
-          type: TrainingType.Cardio,
-        }}
-      />
-      <TrainingCard
-        training={{
-          name: "Trekking",
-          duration: 120,
-          type: TrainingType.Cardio,
-        }}
-      />
+      <div className="p-4 pt-0 overflow-auto h-[calc(100vh-190px)]">
+        {trainings.map((training) => (
+          <TrainingCard training={training} key={training.name} />
+        ))}
+      </div>
     </div>
   );
 }

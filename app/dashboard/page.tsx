@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import Image from "next/image";
 import { TrainingCard } from "@/components/ui/training-card";
-import { trainings } from "@/lib/constants/trainings";
+import prisma from "@/lib/prisma";
 
 export default async function Dashboard() {
   const currentMonthAndYearLiteral = new Date().toLocaleString("en-US", {
@@ -13,8 +13,14 @@ export default async function Dashboard() {
   const authInfo = await auth();
   const userImage = authInfo?.user?.image ?? "";
 
+  const trainings = await prisma.training.findMany({
+    orderBy: {
+      id: "asc",
+    },
+  });
+
   return (
-    <div className="flex flex-col w-screen">
+    <div className="flex flex-col w-screen h-full">
       <div className="p-4 bg-[#0E0C0B]">
         <div className="flex justify-between items-center">
           <div>
@@ -39,7 +45,7 @@ export default async function Dashboard() {
         </p>
       </div>
 
-      <div className="p-4 pt-0 overflow-auto h-[calc(100vh-190px)]">
+      <div className="p-4 pt-0 overflow-auto">
         {trainings.map((training) => (
           <TrainingCard training={training} key={training.name} />
         ))}

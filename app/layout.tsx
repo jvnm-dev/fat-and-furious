@@ -64,12 +64,12 @@ export default async function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased dark flex flex-col",
+          "min-h-screen bg-background font-sans antialiased dark",
           roboto.variable,
           bebas.variable,
         )}
       >
-        <div>{children}</div>
+        <div className="h-[calc(100vh-58px)]">{children}</div>
 
         {!!authInfo?.user && (
           <nav className="w-screen">

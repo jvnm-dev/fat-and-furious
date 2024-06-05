@@ -26,7 +26,7 @@ export const authConfig = {
     },
     async signIn({ profile, account }) {
       if (account?.provider === "google" && !!profile?.email) {
-        const user = await prisma.users.findFirst({
+        const user = await prisma.user.findFirst({
           where: {
             email: profile.email,
           },

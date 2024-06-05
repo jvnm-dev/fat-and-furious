@@ -1,40 +1,32 @@
-import { Training } from "@/lib/types/training";
-import { formatDuration } from "@/lib/utils";
+import { Training } from "@prisma/client";
+
+import { capitalize, formatDuration } from "@/lib/utils";
+import Image from "next/image";
 
 type TrainingCardProps = {
   training: Training;
 };
 
 export const TrainingCard = ({ training }: TrainingCardProps) => {
-  const computeApproximateEndTime = (duration: number) => {
-    const now = new Date();
-    const endTime = new Date(now.getTime() + duration * 60 * 1000);
-    return endTime.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "numeric",
-    });
-  };
-
   return (
-    <div className="flex flex-col border-yellow-400 border-2 p-4 rounded-xl mt-4 cursor-pointer">
-      <div className="flex justify-between items-center">
-        <h3 className="text-xl text-yellow-400">
-          {training.name}{" "}
-          {training.recommended && (
-            <span className="text-green-400 text-xs">Recommended</span>
-          )}
-        </h3>
-        <span className="text-yellow-100">
-          {formatDuration(training.duration)}
-        </span>
+    <div className="flex justify-between border-yellow-400 border-2 p-4 rounded-xl mt-4 cursor-pointer hover:shadow-md hover:shadow-amber-200">
+      <div className="justify-between items-center flex-1">
+        <h3 className="text-xl text-yellow-400">{training.name}</h3>
+        <h5 className="text-yellow-100">{capitalize(training.type)}</h5>
+        <h5 className="text-yellow-100">{formatDuration(training.duration)}</h5>
       </div>
-
-      <div className="flex justify-between items-center mt-4">
-        <span className="text-yellow-100">{training.type}</span>
-        <span className="text-yellow-100">
-          Ends at {computeApproximateEndTime(training.duration)}
-        </span>
-      </div>
+      {!!training.image && (
+        <div className="relative flex-1">
+          <div className="absolute bottom-[7px] right-0 w-full h-full">
+            <Image
+              src={training.image}
+              alt={training.name}
+              width={146}
+              height={80}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

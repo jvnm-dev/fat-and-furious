@@ -8,7 +8,44 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-model users {
-  email String @db.VarChar
-  uuid  String @id(map: "users_pk") @db.Uuid
+model User {
+  id      Int       @id
+  email   String?   @db.VarChar
+  Session Session[]
+}
+
+model Training {
+  id       Int        @id
+  name     String    @db.VarChar
+  duration Int
+  type     String    @db.VarChar
+  image    String    @db.VarChar
+  Exercise Exercise[]
+}
+
+model Exercise {
+  id              Int               @id
+  training_id     Int?
+  name            String?           @db.VarChar
+  image           String?           @db.VarChar
+  Training        Training?         @relation(fields: [training_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  SessionExercise SessionExercise[] @ignore
+}
+
+model Session {
+  id              Int               @id
+  user_id         Int?
+  created_at      DateTime?         @db.Timestamp(6)
+  User            User?             @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  SessionExercise SessionExercise[] @ignore
+}
+
+model SessionExercise {
+  id          Int   @id
+  id_session  Int?
+  id_exercise Int?
+  Exercise    Exercise? @relation(fields: [id_exercise], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Session     Session?  @relation(fields: [id_session], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@ignore
 }

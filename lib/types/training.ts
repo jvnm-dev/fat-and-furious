@@ -3,10 +3,3 @@ export enum TrainingType {
   Cardio = "Cardio",
   Mixed = "Mixed",
 }
-
-export type Training = {
-  name: string;
-  duration: number;
-  type: TrainingType;
-  recommended?: boolean;
-};
